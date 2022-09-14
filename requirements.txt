@@ -1,0 +1,9 @@
+bmipy
+numpy
+pyyaml
+xarray
+dataretrieval
+cftime
+pandas
+requests
+netcdf4

@@ -1,0 +1,12 @@
+bmi-nwis:
+  sites:
+    - 03339000
+    - 01542500
+  start: '2020-01-01'
+  end: '2020-01-10'
+  parameterCd:
+    - 00060
+    - 00010
+  service: dv
+  output: demo2.nc
+

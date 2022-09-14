@@ -1,0 +1,7 @@
+bmi-nwis:
+  sites: 03339000
+  start: '2022-01-01'
+  end: '2022-01-03'
+  service: iv
+  output: demo.nc
+
