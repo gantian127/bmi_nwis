@@ -42,8 +42,8 @@ def get_config():
     cfg.VCS = "git"
     cfg.style = "pep440"
     cfg.tag_prefix = ""
-    cfg.parentdir_prefix = "bmi_era5-"
-    cfg.versionfile_source = "bmi_era5/_version.py"
+    cfg.parentdir_prefix = "bmi_nwis-"
+    cfg.versionfile_source = "bmi_nwis/_version.py"
     cfg.verbose = False
     return cfg
 
