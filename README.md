@@ -1,5 +1,5 @@
 # bmi_nwis
-[![Documentation Status](https://readthedocs.org/projects/bmi_nwis/badge/?version=latest)](https://bmi_nwis.readthedocs.io/en/latest/?badge=latest)
+[![Documentation Status](https://readthedocs.org/projects/bmi_nwis/badge/?version=latest)](https://bmi-nwis.readthedocs.io/en/latest/)
 [![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/gantian127/bmi_nwis/blob/master/LICENSE.txt)
 
 bmi_nwis package is an implementation of the Basic Model Interface ([BMI](https://bmi-spec.readthedocs.io/en/latest/)) 
