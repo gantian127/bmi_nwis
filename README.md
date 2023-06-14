@@ -22,9 +22,14 @@ If you have any suggestion to improve the current function, please create a GitH
 
 #### Stable Release
 
-The bmi_nwis package and its dependencies can be installed with pip.
+The bmi_nwis package and its dependencies can be installed with pip
 ```
 $ pip install bmi_nwis
+```
+
+or with conda.
+```
+$ conda install -c conda-forge bmi_nwis
 ```
 
 ##### From Source
