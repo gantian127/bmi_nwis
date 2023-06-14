@@ -54,7 +54,7 @@ Quick Start
 Below shows how to use two methods to download the NWIS datasets.
 
 You can learn more details from the
-`tutorial notebook <https://github.com/gantian127/bmi_nwis/blob/master/notebooks/bmi_nwis.ipynb>`_
+`tutorial notebook <https://github.com/gantian127/bmi_nwis/blob/master/notebooks/bmi_nwis.ipynb>`_.
 To run this notebook, please go to the `CSDMS EKT Lab <https://csdms.colorado.edu/wiki/Lab-0034>`_
 and follow the instruction in the "Lab notes" section.
 
