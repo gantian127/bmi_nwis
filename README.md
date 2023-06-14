@@ -32,7 +32,7 @@ or with conda.
 $ conda install -c conda-forge bmi_nwis
 ```
 
-##### From Source
+#### From Source
 
 After downloading the source code, run the following command from top-level folder 
 (the one that contains setup.py) to install bmi_nwis.
@@ -46,7 +46,7 @@ Below shows how to use two methods to download the NWIS datasets.
 You can learn more details from the [tutorial notebook](notebooks/bmi_nwis.ipynb). To run this notebook,
 please go to the [CSDMS EKT Lab](https://csdms.colorado.edu/wiki/Lab-0034) and follow the instruction in the "Lab notes" section.
 
-##### Example 1: use the dataretrieval package to download data 
+#### Example 1: use the dataretrieval package to download data 
 
 ```python
 
@@ -63,7 +63,7 @@ ax[1].set_ylabel('Gage height (ft)')
 ```
 ![ts_plot](docs/source/_static/plot.png)
 
-##### Example 2: use BmiNwis class to download data (Demonstration of how to use BMI)
+#### Example 2: use BmiNwis class to download data (Demonstration of how to use BMI)
 
 ```python
 import numpy as np
