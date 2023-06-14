@@ -21,9 +21,6 @@ If you have any suggestion to improve the current function, please create a gith
 `here <https://github.com/gantian127/bmi_nwis/issues>`_.
 
 
-Getting Started
-===============
-
 Installation
 ++++++++++++
 
@@ -34,6 +31,12 @@ The bmi_nwis package and its dependencies can be installed with pip.
 .. code-block:: console
 
     $ pip install bmi_nwis
+
+or with conda.
+
+.. code-block:: console
+
+    $ conda install -c conda-forge bmi_nwis
 
 **From Source**
 
@@ -46,11 +49,14 @@ folder (the one that contains setup.py) to install bmi_nwis.
 
 
 
-Download NWIS Data
+Quick Start
 +++++++++++++++++++++
+Below shows how to use two methods to download the NWIS datasets.
+
 You can learn more details from the
 `tutorial notebook <https://github.com/gantian127/bmi_nwis/blob/master/notebooks/bmi_nwis.ipynb>`_
-and launch binder to run the notebook. |binder|
+To run this notebook, please go to the `CSDMS EKT Lab <https://csdms.colorado.edu/wiki/Lab-0034>`_
+and follow the instruction in the "Lab notes" section.
 
 **Example 1**: Use the dataretrieval package to download data
 
@@ -148,6 +154,8 @@ and launch binder to run the notebook. |binder|
     ax[0].set_ylabel('Stream flow (ft3/s)')
     ax[1].set_ylabel('Gage height (ft)')
 
+    # finalize the data component
+    data_comp.finalize()
 
 Parameter settings
 +++++++++++++++++++
