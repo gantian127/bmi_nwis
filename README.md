@@ -1,8 +1,6 @@
 # bmi_nwis
 [![Documentation Status](https://readthedocs.org/projects/bmi_nwis/badge/?version=latest)](https://bmi_nwis.readthedocs.io/en/latest/?badge=latest)
 [![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/gantian127/bmi_nwis/blob/master/LICENSE.txt)
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/gantian127/bmi_nwis/master?filepath=notebooks%2Fbmi_nwis.ipynb)
-
 
 bmi_nwis package is an implementation of the Basic Model Interface ([BMI](https://bmi-spec.readthedocs.io/en/latest/)) 
 for the [USGS NWIS dataset](https://waterdata.usgs.gov/nwis). 
@@ -16,14 +14,13 @@ Community Surface Dynamics Modeling System ([CSDMS](https://csdms.colorado.edu/w
 
 Please note that the current bmi_nwis implementation only supports to download time series data 
 for instantaneous values and daily mean values ('iv' or 'dv' service option in the dataretrieval package).
-If you have any suggestion to improve the current function, please create a github issue 
+If you have any suggestion to improve the current function, please create a GitHub issue 
 [here](https://github.com/gantian127/bmi_nwis/issues).
 
-## Get Started
 
-#### Install package
+### Install package
 
-##### Stable Release
+#### Stable Release
 
 The bmi_nwis package and its dependencies can be installed with pip.
 ```
@@ -38,11 +35,11 @@ After downloading the source code, run the following command from top-level fold
 $ pip install -e .
 ```
 
-#### Download NWIS Data
-You can learn more details from the
-[tutorial notebook](https://github.com/gantian127/bmi_nwis/blob/master/notebooks/bmi_nwis.ipynb) 
-and launch binder to run the notebook. 
+### Quick Start
+Below shows how to use two methods to download the NWIS datasets. 
 
+You can learn more details from the [tutorial notebook](notebooks/bmi_nwis.ipynb). To run this notebook,
+please go to the [CSDMS EKT Lab](https://csdms.colorado.edu/wiki/Lab-0034) and follow the instruction in the "Lab notes" section.
 
 ##### Example 1: use the dataretrieval package to download data 
 
@@ -138,5 +135,8 @@ ax = dataset.plot(y=['00060','00065'], subplots=True, figsize=(10,8),
                   xlabel='Time', title = 'Time Series Data at USGS Gage 03339000')
 ax[0].set_ylabel('Stream flow (ft3/s)')
 ax[1].set_ylabel('Gage height (ft)')
+
+# finalize the data component
+data_comp.finalize()
 ```
 
