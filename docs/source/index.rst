@@ -2,7 +2,7 @@
     :align: center
     :scale: 10%
     :alt: bmi_nwis
-    :target: https://bmi_nwis.readthedocs.io/
+    :target: https://bmi-nwis.readthedocs.io/en/latest/
 
 
 `bmi_nwis <https://github.com/gantian127/bmi_nwis>`_ package is an implementation of the Basic Model Interface
