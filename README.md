@@ -8,7 +8,7 @@ This package uses the [dataretrieval](https://github.com/USGS-python/dataretriev
 to download the NWIS dataset and wraps the dataset with BMI for data control and query. 
 
 This package is not implemented for people to use but is the key element to convert the NWIS dataset 
-into a data component ([pymt_nwis](https://github.com/gantian127/pymt_nwis)) for 
+into a data component ([pymt_nwis](https://pymt-nwis.readthedocs.io/en/latest/)) for 
 the [PyMT](https://pymt.readthedocs.io/en/latest/?badge=latest) modeling framework developed by 
 Community Surface Dynamics Modeling System ([CSDMS](https://csdms.colorado.edu/wiki/Main_Page)).
 
