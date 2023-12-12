@@ -1,4 +1,5 @@
 # bmi_nwis
+[![DOI](https://zenodo.org/badge/536762868.svg)](https://zenodo.org/doi/10.5281/zenodo.10368748)
 [![Documentation Status](https://readthedocs.org/projects/bmi_nwis/badge/?version=latest)](https://bmi-nwis.readthedocs.io/en/latest/)
 [![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/gantian127/bmi_nwis/blob/master/LICENSE.txt)
 
