@@ -1,15 +1,13 @@
-# -*- coding: utf-8 -*-
+from __future__ import annotations
+
 from collections import namedtuple
-from typing import Tuple
 
-import numpy
-import yaml
-import pandas as pd
 import cftime
-
+import numpy
+import pandas as pd
+import yaml
+from bmi_nwis.utils import NwisData
 from bmipy import Bmi
-
-from bmi_nwis import NwisData
 
 BmiVar = namedtuple(
     "BmiVar", ["dtype", "itemsize", "nbytes", "units", "location", "grid"]
@@ -66,7 +64,9 @@ class BmiNwis(Bmi):
         """
         return float(self._cftime_array[-1])
 
-    def get_grid_face_edges(self, grid: int, face_edges: numpy.ndarray) -> numpy.ndarray:
+    def get_grid_face_edges(
+        self, grid: int, face_edges: numpy.ndarray
+    ) -> numpy.ndarray:
         """Get the face-edge connectivity.
 
         Parameters
@@ -312,7 +312,7 @@ class BmiNwis(Bmi):
         """
         raise NotImplementedError("get_grid_z")
 
-    def get_input_var_names(self) -> Tuple[str]:
+    def get_input_var_names(self) -> tuple[str]:
         """List of a model's input variables.
         Input variable names must be CSDMS Standard Names, also known
         as *long variable names*.
@@ -340,7 +340,7 @@ class BmiNwis(Bmi):
         """
         return len(self._input_var_names)
 
-    def get_output_var_names(self) -> Tuple[str]:
+    def get_output_var_names(self) -> tuple[str]:
         """List of a model's output variables.
         Output variable names must be CSDMS Standard Names, also known
         as *long variable names*.
@@ -581,53 +581,84 @@ class BmiNwis(Bmi):
 
         # parse config file
         if config_file:
-            with open(config_file, "r") as fp:
+            with open(config_file) as fp:
                 conf = yaml.load(fp, Loader=yaml.BaseLoader).get("bmi-nwis", {})
         else:
-            conf = {'sites': '03339000', 'service': 'iv', 'start': '2022-01-01', 'end': '2022-01-03', 'output': 'demo.nc'}
+            conf = {
+                "sites": "03339000",
+                "service": "iv",
+                "start": "2022-01-01",
+                "end": "2022-01-03",
+                "output": "demo.nc",
+            }
 
         # get time series data
         nwis_obj = NwisData()
         self._data = nwis_obj.get_data(**conf)
 
         # get variable names
-        self._var_names_mapping = dict(zip([nwis_obj.variables[var_cd][0] for var_cd in self._data.data_vars.variables],
-                                       self._data.data_vars.variables))  # dict for variable full name and variable code
+        self._var_names_mapping = dict(
+            zip(
+                [
+                    nwis_obj.variables[var_cd][0]
+                    for var_cd in self._data.data_vars.variables
+                ],
+                self._data.data_vars.variables,
+            )
+        )  # dict for variable full name and variable code
 
-        self._output_var_names = tuple(self._var_names_mapping.keys())  # TODO: use CSDMS standard names
+        self._output_var_names = tuple(
+            self._var_names_mapping.keys()
+        )  # TODO: use CSDMS standard names
 
         # get time info
         # convert the datetime64 type to datetime.datetime type, otherwise cftime function has error
-        time_array = pd.to_datetime(numpy.datetime_as_string(self._data['datetime'].values), utc=True).to_pydatetime()
-        self._cftime_unit = 'seconds since 1970-01-01 00:00:00 UTC'
-        self._cftime_array = cftime.date2num(time_array, self._cftime_unit, calendar='standard')
+        time_array = pd.to_datetime(
+            numpy.datetime_as_string(self._data["datetime"].values), utc=True
+        ).to_pydatetime()
+        self._cftime_unit = "seconds since 1970-01-01 00:00:00 UTC"
+        self._cftime_array = cftime.date2num(
+            time_array, self._cftime_unit, calendar="standard"
+        )
         self._time_index = 0
 
         if len(self._cftime_array) > 1:
-            self._time_step = float(self._cftime_array[1] - self._cftime_array[0]) # time step is float type
+            self._time_step = float(
+                self._cftime_array[1] - self._cftime_array[0]
+            )  # time step is float type
         else:
             self._time_step = 0.0
 
         # get grid info
         if len(nwis_obj.sites) == 1:
-            self._grid_x = list(nwis_obj.sites.values())[0]['site_lon']
-            self._grid_y = list(nwis_obj.sites.values())[0]['site_lat']
+            self._grid_x = list(nwis_obj.sites.values())[0]["site_lon"]
+            self._grid_y = list(nwis_obj.sites.values())[0]["site_lat"]
         elif len(nwis_obj.sites) > 1:
-            self._grid_x = [nwis_obj.sites[site_no]['site_lon'] for site_no in self._data['site_no'].values]
-            self._grid_y = [nwis_obj.sites[site_no]['site_lat'] for site_no in self._data['site_no'].values]
+            self._grid_x = [
+                nwis_obj.sites[site_no]["site_lon"]
+                for site_no in self._data["site_no"].values
+            ]
+            self._grid_y = [
+                nwis_obj.sites[site_no]["site_lat"]
+                for site_no in self._data["site_no"].values
+            ]
 
         self._grid_node_count = len(nwis_obj.sites)
 
         # get variable info
         self._var = {}
         for var in self._data.data_vars.variables:
-            array = self._data[var].values  # array: row is site number, column is time step
+            array = self._data[
+                var
+            ].values  # array: row is site number, column is time step
             var_name = nwis_obj.variables[var][0]
 
             self._var[var_name] = BmiVar(
                 dtype=str(array.dtype),
                 itemsize=array.itemsize,
-                nbytes=array[..., self._time_index].nbytes,  # nbytes for current time step value, not the whole time series
+                nbytes=array[
+                    ..., self._time_index
+                ].nbytes,  # nbytes for current time step value, not the whole time series
                 units=nwis_obj.variables[var][1],
                 location="node",  # for point it is "node" type. location options on a grid (node, face, edge)
                 grid=0,  # grid id for variable grid type. check id from self._grid

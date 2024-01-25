@@ -1,8 +1,7 @@
-from .utils import NwisData
-from .bmi import BmiNwis
+from __future__ import annotations
 
-__all__ = ["NwisData", "BmiNwis"]
+from bmi_nwis._version import __version__
+from bmi_nwis.bmi import BmiNwis
+from bmi_nwis.utils import NwisData
 
-from ._version import get_versions
-__version__ = get_versions()['version']
-del get_versions
+__all__ = ["__version__", "BmiNwis", "NwisData"]

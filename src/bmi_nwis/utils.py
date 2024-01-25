@@ -1,9 +1,10 @@
-# -*- coding: utf-8 -*-
-import requests
+from __future__ import annotations
+
 from io import StringIO
 
-import pandas as pd
 import dataretrieval.nwis as nwis
+import pandas as pd
+import requests
 
 
 class NwisData:
@@ -24,14 +25,23 @@ class NwisData:
     def sites(self):
         return self._site_info
 
-    def get_data(self, sites, start, end, service, parameterCd=None, output=None, **kwargs):
-
+    def get_data(
+        self, sites, start, end, service, parameterCd=None, output=None, **kwargs
+    ):
         # check user input
         NwisData._check_user_input(sites, start, end, service, output)
 
         # get data
-        nwis_data = NwisData._get_nwis_data(self, sites=sites, start=start, end=end, service=service,
-                                        parameterCd=parameterCd, output=output, **kwargs)
+        nwis_data = NwisData._get_nwis_data(
+            self,
+            sites=sites,
+            start=start,
+            end=end,
+            service=service,
+            parameterCd=parameterCd,
+            output=output,
+            **kwargs,
+        )
         self._dataset = nwis_data
 
         return nwis_data
@@ -44,42 +54,61 @@ class NwisData:
 
         for site in sites:
             try:
-                site_info = nwis.get_record(sites=site, service='site')
+                site_info = nwis.get_record(sites=site, service="site")
                 if site_info.empty:
                     raise ValueError("Incorrect USGS site number.")
             except Exception:
                 raise ValueError("Incorrect USGS site number.")
 
         # check service
-        if service not in ['dv', 'iv']:
-            raise ValueError("Incorrect service option '{}': 'dv' as daily mean data or 'iv' as instantaneous data.".format(service))
+        if service not in ["dv", "iv"]:
+            raise ValueError(
+                f"Incorrect service option {service}: "
+                f"'dv' as daily mean data or 'iv' as instantaneous data."
+            )
 
         # check output
-        if output and output[-3:] != '.nc':
-            raise ValueError('Incorrect NetCDF file path for the output.')
+        if output and output[-3:] != ".nc":
+            raise ValueError("Incorrect NetCDF file path for the output.")
 
-    def _get_nwis_data(self, sites, start, end, service, parameterCd=None, output=None, **kwargs):
-
+    def _get_nwis_data(
+        self, sites, start, end, service, parameterCd=None, output=None, **kwargs
+    ):
         # get time series data frame
-        ts_df = nwis.get_record(sites=sites, service=service, start=start, end=end, parameterCd=parameterCd, **kwargs)
+        ts_df = nwis.get_record(
+            sites=sites,
+            service=service,
+            start=start,
+            end=end,
+            parameterCd=parameterCd,
+            **kwargs,
+        )
 
         if ts_df.empty:
-            print('Data is not available for the provided parameters.')
+            print("Data is not available for the provided parameters.")
             raise
         else:
             # get site info
-            site_info = NwisData._get_site_info(sites=sites)    # sites=['03339000','01542500']
+            site_info = NwisData._get_site_info(
+                sites=sites
+            )  # sites=['03339000','01542500']
             if not site_info:
-                print('Failed to get the site information.')
+                print("Failed to get the site information.")
                 raise
             else:
                 self._site_info = site_info
 
             # get variable info
-            parameterCd = list(set([name.split('_')[0] for name in ts_df.columns if name.split('_')[0].isnumeric()]))
+            parameterCd = list(
+                {
+                    name.split("_")[0]
+                    for name in ts_df.columns
+                    if name.split("_")[0].isnumeric()
+                }
+            )
             variable_info = NwisData._get_variable_info(parameterCd)
             if not variable_info:
-                print('Failed to get the variable information.')
+                print("Failed to get the variable information.")
                 raise
             else:
                 self._variable_info = variable_info
@@ -87,29 +116,35 @@ class NwisData:
             # refine dataframe
             filter_names = []
             for code in parameterCd:
-                for pattern in ['', '_Mean', '_hach', '_hach_Mean']:
-                    if code+pattern in ts_df.columns:
-                        filter_names.append(code+pattern)
+                for pattern in ["", "_Mean", "_hach", "_hach_Mean"]:
+                    if code + pattern in ts_df.columns:
+                        filter_names.append(code + pattern)
                         break
 
-            nwis_df = ts_df[filter_names]  # this removes the max, min, cd columns from the dataframe
-            new_col_names = [name.split('_')[0] for name in filter_names]
+            nwis_df = ts_df[
+                filter_names
+            ]  # this removes the max, min, cd columns from the dataframe
+            new_col_names = [name.split("_")[0] for name in filter_names]
             nwis_df.columns = new_col_names
 
             # convert to xarray
-            nwis_data = nwis_df.to_xarray()  # in the array, the row is site number, column is time step
+            nwis_data = (
+                nwis_df.to_xarray()
+            )  # in the array, the row is site number, column is time step
 
             if nwis_df.index.nlevels == 1:
-                nwis_data.coords['datetime'] = nwis_df.index.values
+                nwis_data.coords["datetime"] = nwis_df.index.values
             else:
-                nwis_data.coords['datetime'] = nwis_df.index.levels[nwis_df.index.names.index('datetime')].values
+                nwis_data.coords["datetime"] = nwis_df.index.levels[
+                    nwis_df.index.names.index("datetime")
+                ].values
 
             # save output file as csv file
             if output:
                 try:
                     nwis_data.to_netcdf(output)
                 except Exception:
-                    print('Failed to write the data in the NetCDF file.')
+                    print("Failed to write the data in the NetCDF file.")
                     raise
 
         return nwis_data
@@ -117,13 +152,13 @@ class NwisData:
     @staticmethod
     def _get_site_info(sites):
         site_info = {}
-        site_info_df = nwis.get_record(sites=sites, service='site')
+        site_info_df = nwis.get_record(sites=sites, service="site")
         for index, row in site_info_df.iterrows():
-            site_info[row['site_no']] = {
-                'site_lat': row['dec_lat_va'],
-                'site_lon': row['dec_long_va'],
-                'site_altitude': row['alt_va'],
-                'site_name': row['station_nm'],
+            site_info[row["site_no"]] = {
+                "site_lat": row["dec_lat_va"],
+                "site_lon": row["dec_long_va"],
+                "site_altitude": row["alt_va"],
+                "site_name": row["station_nm"],
             }
 
         return site_info
@@ -135,8 +170,10 @@ class NwisData:
 
         for parameter in parameterCd:
             try:
-                url = 'https://help.waterdata.usgs.gov/code/parameter_cd_nm_query?' \
-                      'parm_nm_cd={}&fmt=rdb'.format(parameter)
+                url = (
+                    "https://help.waterdata.usgs.gov/code/parameter_cd_nm_query?"
+                    "parm_nm_cd={}&fmt=rdb".format(parameter)
+                )
                 response = requests.get(url)
 
                 headerlines = []
@@ -168,9 +205,12 @@ class NwisData:
                 )
 
             except Exception as e:
-                print('Failed to get the variable information from the NWIS system.')
+                print("Failed to get the variable information from the NWIS system.")
                 raise
 
-            variable_info[parameter] = [variable_info_df['SRSName'][0].split(',')[0], variable_info_df['parm_unit'][0]]
+            variable_info[parameter] = [
+                variable_info_df["SRSName"][0].split(",")[0],
+                variable_info_df["parm_unit"][0],
+            ]
 
         return variable_info
