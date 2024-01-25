@@ -57,14 +57,19 @@ import dataretrieval.nwis as nwis
 
 # get data from NWIS
 dataset = nwis.get_record(
-    sites='03339000', service='iv', start='2022-01-01', end='2022-01-03'
+    sites="03339000", service="iv", start="2022-01-01", end="2022-01-03"
 )
 
 # plot discharge data
-ax = dataset.plot(y=['00060','00065'], subplots=True, figsize=(10,8),
-                  xlabel='Time', title = 'Time Series Data at USGS Gage 03339000')
-ax[0].set_ylabel('Stream flow (ft3/s)')
-ax[1].set_ylabel('Gage height (ft)')
+ax = dataset.plot(
+    y=["00060", "00065"],
+    subplots=True,
+    figsize=(10, 8),
+    xlabel="Time",
+    title="Time Series Data at USGS Gage 03339000",
+)
+ax[0].set_ylabel("Stream flow (ft3/s)")
+ax[1].set_ylabel("Gage height (ft)")
 ```
 
 ```{image} _static/plot.png
@@ -142,7 +147,7 @@ plt.title("Discharge Observation at USGS Gage 03339000")
 ## Parameter settings
 
 To initiate a data component, a configuration file (e.g., [config_file.yaml][config] )
-can be used to specify the parameters for downloading the data. The major parameters are 
+can be used to specify the parameters for downloading the data. The major parameters are
 listed below:
 
 - **sites**: The site number for the USGS gage, which is a unique 8- to 15-digit identification number for each site.
@@ -165,4 +170,3 @@ listed below:
 [pymt_nwis]: https://pymt-nwis.readthedocs.io
 [pymt-docs]: https://pymt.readthedocs.io
 [config]: https://github.com/gantian127/bmi_nwis/blob/master/notebooks/config_file.yaml
-

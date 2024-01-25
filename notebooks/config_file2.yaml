@@ -9,4 +9,3 @@ bmi-nwis:
     - 00010
   service: dv
   output: demo2.nc
-
