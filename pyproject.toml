@@ -29,7 +29,6 @@ classifiers = [
 dependencies = [
     "bmipy",
     "cftime",
-    "click",
     "dataretrieval",
     "netcdf4",
     "numpy",
@@ -45,9 +44,6 @@ dynamic = [
 
 [project.license]
 text = "MIT"
-
-[project.scripts]
-nwis = "bmi_nwis.cli:main"
 
 [project.urls]
 documentation = "https://github.com/gantian127/bmi_nwis"

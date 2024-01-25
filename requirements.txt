@@ -1,6 +1,5 @@
 bmipy
 cftime
-click
 dataretrieval
 netcdf4
 numpy
