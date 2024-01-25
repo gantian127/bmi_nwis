@@ -99,7 +99,7 @@ for var_name in data_comp.get_output_var_names():
     print(f"{var_type=}")
     print(f"{var_grid=}")
     print(f"{var_itemsize=}")
-    print(f"{var_nbytes=}")
+    print(f"{var_nbytes=}\n")
 
 # get time info
 start_time = data_comp.get_start_time()

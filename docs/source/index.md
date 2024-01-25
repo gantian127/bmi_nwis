@@ -60,7 +60,7 @@ dataset = nwis.get_record(
     sites="03339000", service="iv", start="2022-01-01", end="2022-01-03"
 )
 
-# plot discharge data
+# plot data
 ax = dataset.plot(
     y=["00060", "00065"],
     subplots=True,
@@ -78,9 +78,9 @@ ax[1].set_ylabel("Gage height (ft)")
 **Example 2**: use BmiNwis class to download data (Demonstration of how to use BMI).
 
 ```python
-import matplotlib.pyplot as plt
 import numpy as np
 import cftime
+import pandas as pd
 
 from bmi_nwis import BmiNwis
 
@@ -104,7 +104,7 @@ for var_name in data_comp.get_output_var_names():
     print(f"{var_type=}")
     print(f"{var_grid=}")
     print(f"{var_itemsize=}")
-    print(f"{var_nbytes=}")
+    print(f"{var_nbytes=}\n")
 
 # get time info
 start_time = data_comp.get_start_time()
@@ -119,29 +119,61 @@ print(f"{time_step=}")
 print(f"{time_unit=}")
 print(f"{time_steps=}")
 
-# initiate numpy arrays to store discharge data
-discharge_value = np.empty(1)
-discharge_array = np.empty(time_steps)
-cftime_array = np.empty(time_steps)
+# get variable grid info
+grid_type = data_comp.get_grid_type(var_grid)
+grid_rank = data_comp.get_grid_rank(var_grid)
+grid_node_count = data_comp.get_grid_node_count(var_grid)
+
+site_lon = np.empty(grid_node_count)
+data_comp.get_grid_x(var_grid, site_lon)
+
+site_lat = np.empty(grid_node_count)
+data_comp.get_grid_y(var_grid, site_lat)
+
+print(f"{grid_type=}")
+print(f"{grid_rank=}")
+print(f"{grid_node_count=}")
+print(f"{site_lon[0]=}")
+print(f"{site_lat[0]=}")
+
+# initiate dataframe to store data
+dataset = pd.DataFrame(columns=["00060", "00065", "time"])
 
 for i in range(0, time_steps):
-    data_comp.get_value("discharge", discharge_value)
-    discharge_array[i] = discharge_value[0]
-    cftime_array[i] = data_comp.get_current_time()
+    # get stream flow data
+    stream_flow = np.empty(1)
+    data_comp.get_value("Stream flow", stream_flow)
+
+    # get gage height data
+    gage_height = np.empty(1)
+    data_comp.get_value("Height", gage_height)
+
+    # get time data
+    cftime_value = data_comp.get_current_time()
+    time = cftime.num2pydate(cftime_value, time_unit)
+
+    # add new row to dataframe
+    dataset.loc[len(dataset)] = [stream_flow[0], gage_height[0], time]
+
+    # update to next time step
     data_comp.update()
 
-time_array = cftime.num2date(
-    cftime_array,
-    time_unit,
-    only_use_cftime_datetimes=False,
-    only_use_python_datetimes=True,
-)
+# convert time to local time
+dataset = dataset.set_index("time").tz_localize(tz="UTC").tz_convert(tz="US/Central")
 
-# plot discharge data
-plt.figure(figsize=(9, 5))
-plt.plot(time_array, discharge_array)
-plt.ylabel("discharge (cubic feet per second)")
-plt.title("Discharge Observation at USGS Gage 03339000")
+# plot data
+ax = dataset.plot(
+    y=["00060", "00065"],
+    subplots=True,
+    figsize=(10, 8),
+    xlabel="Time",
+    title="Time Series Data at USGS Gage 03339000",
+)
+ax[0].set_ylabel("Stream flow (ft3/s)")
+ax[1].set_ylabel("Gage height (ft)")
+
+# finalize the data component
+data_comp.finalize()
 ```
 
 ## Parameter settings
