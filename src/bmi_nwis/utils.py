@@ -153,7 +153,7 @@ class NwisData:
     def _get_site_info(sites):
         site_info = {}
         site_info_df = nwis.get_record(sites=sites, service="site")
-        for index, row in site_info_df.iterrows():
+        for _, row in site_info_df.iterrows():
             site_info[row["site_no"]] = {
                 "site_lat": row["dec_lat_va"],
                 "site_lon": row["dec_long_va"],
@@ -188,7 +188,7 @@ class NwisData:
                         columns = line.split()
                         count += 1
                     elif count == 1:
-                        types = line.split()
+                        # types = line.split()
                         count += 1
                     else:
                         datalines.append(line)
@@ -205,7 +205,9 @@ class NwisData:
                 )
 
             except Exception as e:
-                print("Failed to get the variable information from the NWIS system.")
+                print(
+                    f"Failed to get the variable information from the NWIS system.\n{e}"
+                )
                 raise
 
             variable_info[parameter] = [
