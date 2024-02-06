@@ -1,53 +1,56 @@
-# bmi_nwis
-[![DOI](https://zenodo.org/badge/536762868.svg)](https://zenodo.org/doi/10.5281/zenodo.10368748)
-[![Documentation Status](https://readthedocs.org/projects/bmi_nwis/badge/?version=latest)](https://bmi-nwis.readthedocs.io/en/latest/)
-[![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/gantian127/bmi_nwis/blob/master/LICENSE.txt)
+```{image} _static/bmi_nwis_logo.png
+:align: center
+:alt: bmi_nwis
+:scale: 30%
+:target: https://nwis.readthedocs.io/
+```
 
-bmi_nwis package is an implementation of the Basic Model Interface ([BMI](https://bmi-spec.readthedocs.io/en/latest/))
-for the [USGS NWIS dataset](https://waterdata.usgs.gov/nwis).
-This package uses the [dataretrieval](https://github.com/USGS-python/dataretrieval) package
+[bmi_nwis][bmi_nwis-github] package is an implementation of the
+[Basic Model Interface (BMI)][bmi-docs] for the [USGS NWIS dataset][nwis-link].
+This package uses the [dataretrieval][dataretrieval] package
 to download the NWIS dataset and wraps the dataset with BMI for data control and query.
 
 This package is not implemented for people to use but is the key element to convert the NWIS dataset
-into a data component ([pymt_nwis](https://pymt-nwis.readthedocs.io/en/latest/)) for
-the [PyMT](https://pymt.readthedocs.io/en/latest/?badge=latest) modeling framework developed by
-Community Surface Dynamics Modeling System ([CSDMS](https://csdms.colorado.edu/wiki/Main_Page)).
+into a data component ([pymt_nwis][pymt_nwis]) for
+the [PyMT][pymt-docs] modeling framework developed by
+[Community Surface Dynamics Modeling System (CSDMS)][csdms].
 
 Please note that the current bmi_nwis implementation only supports to download time series data
 for instantaneous values and daily mean values ('iv' or 'dv' service option in the dataretrieval package).
-If you have any suggestion to improve the current function, please create a GitHub issue
-[here](https://github.com/gantian127/bmi_nwis/issues).
 
+# Getting Started
 
-### Install package
+## Installation
 
-#### Stable Release
+**Stable Release**
 
-The bmi_nwis package and its dependencies can be installed with pip
+The nwis package and its dependencies can be installed with pip.
+
+````{tab} pip
+```console
+pip install bmi_nwis
 ```
-$ pip install bmi_nwis
+````
+
+````{tab} conda
+```console
+conda install -c conda-forge bmi_nwis
+```
+````
+
+**From Source**
+
+After downloading the [source code][nwis-github], run the following command from top-level
+folder (the one that contains setup.py) to install nwis.
+
+```console
+pip install -e .
 ```
 
-or with conda.
-```
-$ conda install -c conda-forge bmi_nwis
-```
+## Download NWIS Data
 
-#### From Source
 
-After downloading the source code, run the following command from top-level folder
-(the one that contains setup.py) to install bmi_nwis.
-```
-$ pip install -e .
-```
-
-### Quick Start
-Below shows how to use two methods to download the NWIS datasets.
-
-You can learn more details from the [tutorial notebook](notebooks/bmi_nwis.ipynb). To run this notebook,
-please go to the [CSDMS EKT Lab](https://csdms.colorado.edu/wiki/Lab-0034) and follow the instruction in the "Lab notes" section.
-
-#### Example 1: use the dataretrieval package to download data
+**Example 1**: Use the dataretrieval package to download data
 
 ```python
 import dataretrieval.nwis as nwis
@@ -68,9 +71,11 @@ ax = dataset.plot(
 ax[0].set_ylabel("Stream flow (ft3/s)")
 ax[1].set_ylabel("Gage height (ft)")
 ```
-![ts_plot](docs/source/_static/plot.png)
 
-#### Example 2: use BmiNwis class to download data (Demonstration of how to use BMI)
+```{image} _static/plot.png
+```
+
+**Example 2**: use BmiNwis class to download data (Demonstration of how to use BMI).
 
 ```python
 import numpy as np
@@ -170,3 +175,30 @@ ax[1].set_ylabel("Gage height (ft)")
 # finalize the data component
 data_comp.finalize()
 ```
+
+## Parameter settings
+
+To initiate a data component, a configuration file (e.g., [config_file.yaml][config] )
+can be used to specify the parameters for downloading the data. The major parameters are
+listed below:
+
+- **sites**: The site number for the USGS gage, which is a unique 8- to 15-digit identification number for each site.
+  'sites' can be a string value for one site or a list of string values for multiple sites.
+- **start**: The start date of the time series data (example string format as "YYYY-MM-DD").
+- **end**: The end date of the time series data (example string format as "YYYY-MM-DD").
+- **service**: The service option for data download.
+  Options include 'dv'- daily mean value and 'iv'- instantaneous value.
+- **parameterCd**: The parameter code defined by USGS for the variables (e.g., 00060 represents Stream flow).
+  'parameterCd' can be a string value for one variable or a list of string values for multiple variables.
+- **output**: The file path of the NetCDF file to store the data.
+
+
+<!-- links -->
+[bmi-docs]: https://bmi.readthedocs.io
+[bmi_nwis-github]: https://github.com/gantian127/bmi_nwis
+[csdms]: https://csdms.colorado.edu
+[dataretrieval]: https://github.com/USGS-python/dataretrieval
+[nwis-link]: https://waterdata.usgs.gov/nwis?
+[pymt_nwis]: https://pymt-nwis.readthedocs.io
+[pymt-docs]: https://pymt.readthedocs.io
+[config]: https://github.com/gantian127/bmi_nwis/blob/master/notebooks/config_file.yaml

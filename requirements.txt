@@ -1,9 +1,9 @@
 bmipy
-numpy
-pyyaml
-xarray
-dataretrieval
 cftime
-pandas
-requests
+dataretrieval
 netcdf4
+numpy
+pandas
+pyyaml
+requests
+xarray

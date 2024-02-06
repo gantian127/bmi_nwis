@@ -4,4 +4,3 @@ bmi-nwis:
   end: '2022-01-03'
   service: iv
   output: demo.nc
-
