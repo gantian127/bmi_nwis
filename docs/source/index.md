@@ -24,7 +24,7 @@ for instantaneous values and daily mean values ('iv' or 'dv' service option in t
 
 **Stable Release**
 
-The nwis package and its dependencies can be installed with pip.
+The bmi_nwis package and its dependencies can be installed with pip.
 
 ````{tab} pip
 ```console
@@ -41,7 +41,7 @@ conda install -c conda-forge bmi_nwis
 **From Source**
 
 After downloading the [source code][nwis-github], run the following command from top-level
-folder (the one that contains setup.py) to install nwis.
+folder to install bmi_nwis.
 
 ```console
 pip install -e .

@@ -35,8 +35,8 @@ $ conda install -c conda-forge bmi_nwis
 
 #### From Source
 
-After downloading the source code, run the following command from top-level folder
-(the one that contains setup.py) to install bmi_nwis.
+After downloading the source code, run the following command from top-level folder 
+to install bmi_nwis.
 ```
 $ pip install -e .
 ```
