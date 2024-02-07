@@ -1,7 +1,7 @@
 ```{image} _static/bmi_nwis_logo.png
 :align: center
 :alt: bmi_nwis
-:scale: 30%
+:scale: 13%
 :target: https://nwis.readthedocs.io/
 ```
 
@@ -40,7 +40,7 @@ conda install -c conda-forge bmi_nwis
 
 **From Source**
 
-After downloading the [source code][nwis-github], run the following command from top-level
+After downloading the [source code][bmi_nwis-github], run the following command from top-level
 folder to install bmi_nwis.
 
 ```console
