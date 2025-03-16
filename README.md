@@ -1,5 +1,5 @@
 # bmi_nwis
-[![DOI](https://zenodo.org/badge/536762868.svg)](https://zenodo.org/doi/10.5281/zenodo.10368748)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.10368748.svg)](https://doi.org/10.5281/zenodo.10368748)
 [![Documentation Status](https://readthedocs.org/projects/bmi_nwis/badge/?version=latest)](https://bmi-nwis.readthedocs.io/en/latest/)
 [![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/gantian127/bmi_nwis/blob/master/LICENSE.txt)
 
@@ -40,6 +40,17 @@ to install bmi_nwis.
 ```
 $ pip install -e .
 ```
+
+### Citation
+Please include the following references when citing this software package:
+
+Gan, T., Tucker, G.E., Hutton, E.W.H., Piper, M.D., Overeem, I., Kettner, A.J.,
+Campforts, B., Moriarty, J.M., Undzis, B., Pierce, E., McCready, L., 2024:
+CSDMS Data Components: data–model integration tools for Earth surface processes
+modeling. Geosci. Model Dev., 17, 2165–2185. https://doi.org/10.5194/gmd-17-2165-2024
+
+Gan, T. (2023). CSDMS NWIS Data Component. Zenodo. https://doi.org/10.5281/zenodo.10368748
+
 
 ### Quick Start
 Below shows how to use two methods to download the NWIS datasets.
